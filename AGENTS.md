@@ -10,3 +10,4 @@ The contributor rules in [`docs/development.md`](docs/development.md) §2 apply 
 - Add Expo-managed packages with `pnpm exec expo install <package>`; other dependencies need the checks in `docs/security.md` §13.
 - Run `pnpm check` before calling a task done. Do not claim a test passed unless it ran.
 - Commits use Conventional Commits and a DCO sign-off (`git commit -s`).
+- Work follows [`docs/plan.md`](docs/plan.md): tasks in order, one at a time. Finish and test a task, tick only what actually ran, then continue with the next. Stop only for a real blocker.

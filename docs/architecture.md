@@ -39,14 +39,18 @@ The security boundary is the vault: nothing reads or writes financial data excep
 ## 3. Layers and rules
 
 ```text
-Presentation → Application → Domain ← Data → Platform
+Presentation → Application → Domain ← Data, Security, Platform
 ```
+
+Outer layers reach each other only through ports (interfaces) owned by the application layer, and a composition root wires the implementations in. See [ADR 0004](adr/0004-ports-and-composition-root.md).
 
 - **Presentation:** screens, navigation, forms, loading/error states, design-system components. No SQL, no cryptography, no secret handling, no premium checks beyond calling the entitlement service.
 - **Application (use cases):** `CreateEntry`, `VoidEntry`, `TransferBetweenAccounts`, `CreateInvoice`, `IssueInvoice`, `ShareInvoicePdf`, `MarkInvoiceSent`, `RecordPayment` (income entry + allocation, one transaction), `VoidInvoice`, `ComputeOutlook`, `EstimatePlannedPurchase`, `CreateBackup`, `RestoreBackup`, `ImportCsv`, `ExportCsv`, `UnlockVault`, `RotateRecovery`, `GetEntitlement`, `PurchasePremium`, `RestorePurchases`.
 - **Domain:** entities, validation, exact money arithmetic, invoice totals and derived status, allocation rules, outlook calculations, recurrence expansion, report calculations. Pure functions, no I/O, fully unit-testable.
 - **Data:** repositories (`LedgerRepository`, `AccountRepository`, `InvoiceRepository`, `ClientRepository`, `CommitmentRepository`, `SettingsRepository`), the Drizzle (or equivalent) schema, migrations. All SQL lives here.
-- **Platform:** interfaces plus iOS/Android implementations. Domain, application and presentation code must not import platform APIs directly; an ESLint boundary rule enforces the dependency direction.
+- **Ports:** the interfaces use cases need from outside (`SecureKeyStore`, `DeviceAuth`, `RandomSource`, `Clock`, repositories, files, sharing, notifications, purchases) live in `src/application/ports/`, with shared test fakes beside them.
+- **Platform:** iOS/Android implementations of ports. Domain, application and presentation code must not import platform APIs directly; an ESLint boundary rule enforces the dependency direction.
+- **Composition root (`src/composition/`):** the one place that may import every layer. It builds the implementations and hands use cases to the routes.
 
 ## 4. Source tree
 
@@ -68,12 +72,13 @@ src/
 │   ├── recurrence/
 │   └── reports/
 ├── application/             use cases
+│   └── ports/               interfaces to the outside world + fakes/ for tests
 ├── data/
 │   ├── schema/
 │   ├── migrations/
 │   └── repositories/
-├── platform/
-│   ├── secure-key-store/    interface + ios/ + android/
+├── platform/                implementations of ports
+│   ├── secure-key-store/    ios/ + android/ where they differ
 │   ├── biometrics/
 │   ├── files/
 │   ├── share/
@@ -82,6 +87,7 @@ src/
 │   ├── widgets/
 │   └── purchases/
 ├── security/                key hierarchy, vault lifecycle, backup format
+├── composition/             composition root: wires implementations into use cases
 ├── i18n/
 ├── design-system/           tokens, components
 └── logging/                 sanitized logging only
@@ -198,13 +204,15 @@ Paywall → PurchaseService (interface)
 
 ```typescript
 interface SecureKeyStore {
-  wrap(plain: Uint8Array, opts: { requireAuth: boolean }): Promise<WrappedKey>;
-  unwrap(wrapped: WrappedKey): Promise<Uint8Array>;
-  delete(alias: string): Promise<void>;
+  store(alias: KeyAlias, secret: Uint8Array, options: { requireAuth: boolean }): Promise<void>;
+  load(alias: KeyAlias): Promise<Uint8Array | null>; // null: no usable secret → recovery phrase
+  remove(alias: KeyAlias): Promise<void>;
 }
 ```
 
-The interface is byte-oriented. If the underlying library stores strings only, the adapter encodes and decodes; this is an adapter detail the domain never sees. Equivalent interfaces exist for biometrics, file/folder access (Android Storage Access Framework, iOS document picker and security-scoped bookmarks), sharing, notifications, background scheduling and widgets. iOS and Android implementations live side by side in `platform/<capability>/`.
+The port is byte-oriented. If the underlying library stores strings only, the adapter encodes and decodes; this is an adapter detail the domain never sees. `load` resolves `null` whenever no usable secret exists (never stored, lost in a restore, or invalidated by a biometric enrollment change), because the platform does not tell these apart. Reading a secret stored with `requireAuth` is what authenticates the user; `DeviceAuth` only reports what the device offers.
+
+Equivalent ports exist or will exist for randomness and the clock, file/folder access (Android Storage Access Framework, iOS document picker and security-scoped bookmarks), sharing, notifications, background scheduling and widgets. Implementations live in `platform/<capability>/`, with iOS and Android side by side where they differ.
 
 ## 11. Visual-material boundary
 

@@ -6,9 +6,12 @@ packages:
 minimumReleaseAge: 4320
 
 # Dependency install scripts are blocked unless listed as `true` here.
-# Both packages ship prebuilt binaries, so their scripts stay off.
+# @parcel/watcher and unrs-resolver ship prebuilt binaries, so their scripts stay off.
+# react-native-libsodium's script only unpacks the prebuilt libsodium archive
+# bundled in the package (`tar -xzf libsodium/build.tgz`); the native build needs it.
 allowBuilds:
   '@parcel/watcher': false
+  react-native-libsodium: true
   unrs-resolver: false
 
 # Optional peers (react-dom, react-native-worklets, ...) would otherwise be

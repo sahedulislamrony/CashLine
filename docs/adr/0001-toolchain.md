@@ -14,7 +14,7 @@ Phase 0 (`development.md`) requires the SDK, Node version, package manager, iden
 | Expo SDK         | 57 (React Native 0.86, React 19.2), Expo Router                                              |
 | Targets          | iOS and Android only; no web target                                                          |
 | Minimum OS       | iOS 16.4 and Android 7.0 (API 24), the minimums of this SDK                                  |
-| Node.js          | 24 (`.nvmrc`); `engines` allows 22.11 or newer                                               |
+| Node.js          | 24 (`.nvmrc`); `engines` allows 22.18 or newer                                               |
 | Package manager  | pnpm 11, pinned through `packageManager`                                                     |
 | Language         | TypeScript 6, `strict` plus `noUncheckedIndexedAccess`                                       |
 | Lint and format  | ESLint 9 with `eslint-config-expo`; Prettier                                                 |

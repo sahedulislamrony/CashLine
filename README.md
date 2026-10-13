@@ -35,6 +35,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, [SECURITY.md](SECU
 | [`docs/security.md`](docs/security.md)                             | Threat model, cryptography rules, tests               |
 | [`docs/design-system.md`](docs/design-system.md)                   | Tokens, components, accessibility                     |
 | [`docs/development.md`](docs/development.md)                       | Phase plan, contributor rules, release checklist      |
+| [`docs/plan.md`](docs/plan.md)                                     | Step-by-step work plan and progress                   |
 | [`docs/memory.md`](docs/memory.md)                                 | Decision log and open questions                       |
 | [`docs/market-analysis.md`](docs/market-analysis.md)               | Competitor and gap analysis                           |
 

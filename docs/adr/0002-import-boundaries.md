@@ -1,6 +1,6 @@
 # 0002 — Enforcing layer boundaries with ESLint
 
-- Status: Accepted
+- Status: Accepted; layer table and composition root amended by [0004](0004-ports-and-composition-root.md)
 - Date: 2026-10-13
 
 ## Context

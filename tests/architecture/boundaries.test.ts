@@ -88,6 +88,81 @@ describe('import boundaries', () => {
     expect(ids).toEqual([]);
   });
 
+  it.each(['data', 'security', 'platform'])(
+    'lets src/%s use the ports but not another outer layer',
+    async (layerName) => {
+      expect(
+        await ruleIds(
+          `src/${layerName}/example.ts`,
+          "import { keyAlias } from '@/application/ports';\nexport const x = keyAlias;\n",
+        ),
+      ).toEqual([]);
+      expect(
+        await ruleIds(
+          `src/${layerName}/example.ts`,
+          "import { colors } from '@/design-system/tokens';\nexport const x = colors;\n",
+        ),
+      ).toContain('import/no-restricted-paths');
+    },
+  );
+
+  it('lets outer layers use the pure domain', async () => {
+    const ids = await ruleIds(
+      'src/platform/example.ts',
+      "import { instant } from '@/domain/identity/instant';\nexport const x = instant;\n",
+    );
+    expect(ids).toEqual([]);
+  });
+
+  it('keeps the domain from importing application ports', async () => {
+    const ids = await ruleIds(
+      'src/domain/example.ts',
+      "import { keyAlias } from '@/application/ports';\nexport const x = keyAlias;\n",
+    );
+    expect(ids).toContain('import/no-restricted-paths');
+  });
+
+  it.each([
+    'src/application/example.ts',
+    'src/security/example.ts',
+    'src/platform/example.ts',
+    'src/composition/example.ts',
+    'app/example.tsx',
+  ])('rejects test fakes in shipped file %s', async (filePath) => {
+    const ids = await ruleIds(
+      filePath,
+      "import { FakeSecureKeyStore } from '@/application/ports/fakes';\nexport const x = FakeSecureKeyStore;\n",
+    );
+    expect(ids).toContain('no-restricted-imports');
+  });
+
+  it.each(['src/security/vault.test.ts', 'src/application/use-case.test.ts'])(
+    'allows test fakes in test file %s',
+    async (filePath) => {
+      const ids = await ruleIds(
+        filePath,
+        "import { FakeSecureKeyStore } from '@/application/ports/fakes';\nexport const x = FakeSecureKeyStore;\n",
+      );
+      expect(ids).toEqual([]);
+    },
+  );
+
+  it('still keeps frameworks out of domain test files', async () => {
+    const ids = await ruleIds(
+      'src/domain/money/example.test.ts',
+      "import { Platform } from 'react-native';\nexport const x = Platform.OS;\n",
+    );
+    expect(ids).toContain('no-restricted-imports');
+  });
+
+  it('lets the composition root import any layer', async () => {
+    const ids = await ruleIds(
+      'src/composition/example.ts',
+      "import { keyAlias } from '@/application/ports';\nimport { colors } from '@/design-system/tokens';\nexport const x = [keyAlias, colors];\n",
+    );
+    expect(ids).toEqual([]);
+  });
+
   it('rejects console logging', async () => {
     const ids = await ruleIds('src/design-system/example.ts', "console.log('amount');\n");
     expect(ids).toContain('no-console');
