@@ -48,7 +48,7 @@
     "react-native-screens": "~4.26.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.3",
+    "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@react-native/jest-preset": "0.86.3",
     "@react-native/metro-config": "0.86.3",
