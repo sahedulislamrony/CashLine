@@ -103,7 +103,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec expo prebuild --platform android --no-install
       - name: Build debug APK

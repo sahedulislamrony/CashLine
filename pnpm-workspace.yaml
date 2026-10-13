@@ -14,3 +14,11 @@ allowBuilds:
 # Optional peers (react-dom, react-native-worklets, ...) would otherwise be
 # pulled in and autolinked into the native build. Peers are declared explicitly.
 autoInstallPeers: false
+
+# Advisories with no patched release on npm yet. Both are in build-time tooling
+# (Expo CLI, Metro) and are not part of the app bundle. Remove each entry as soon
+# as the patched version is published, then update the lockfile.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-86w9-cpqp-85rv # node-forge <=1.4.0, patched in 1.4.1 (unreleased)
+    - GHSA-vfj7-8cjw-p6xm # braces <=3.0.3, patched in 3.0.4 (unreleased)
