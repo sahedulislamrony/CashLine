@@ -85,7 +85,7 @@ Unverified (must be rechecked at implementation time):
 - Drizzle compatibility with Expo SDK 57, SQLCipher behavior with raw keys.
 - Android Keystore and iOS Keychain behavior on backup restore and biometric enrollment change.
 - The three Expo modules above are not installed yet and no adapter exists; nothing about them has been run. Their documented behavior must be confirmed on real iOS and Android devices (plan tasks 2.4 and 2.6).
-- `react-native-libsodium` is installed but has **never been built or run on a device**. Unverified: that it compiles with Expo SDK 57 / React Native 0.86 on iOS and Android (the next CI run will show), that its results equal the WebAssembly build's, and how long Argon2id at 64 MiB takes on real phones (it blocks the JavaScript thread while it runs). Its README states New Architecture support and it was last updated for React Native 0.83.
+- `react-native-libsodium` now **compiles on iOS** with Expo SDK 57 / React Native 0.86 (CI and a local `pnpm build:ios`, 2026-10-14) but has **never been run**. Unverified: the Android build, that its results on device equal the WebAssembly build's, and how long Argon2id at 64 MiB takes on real phones (it blocks the JavaScript thread while it runs).
 - Argon2id parameters (take from current OWASP guidance or RFC 9106).
 - Purchase library choice and its compatibility with the chosen SDK.
 - Evolu and other sync candidates' licenses, E2EE support and Expo compatibility.

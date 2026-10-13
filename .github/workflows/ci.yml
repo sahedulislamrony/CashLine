@@ -104,10 +104,8 @@ jobs:
           distribution: temurin
           java-version: 17
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec expo prebuild --platform android --no-install
       - name: Build debug APK
-        working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        run: pnpm build:android
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cashline-android-debug
@@ -127,18 +125,8 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Generate native project and install pods
-        run: pnpm exec expo prebuild --platform ios
-      - name: Build for simulator
-        run: >
-          xcodebuild
-          -workspace ios/Cashline.xcworkspace
-          -scheme Cashline
-          -configuration Debug
-          -sdk iphonesimulator
-          -derivedDataPath ios/build
-          CODE_SIGNING_ALLOWED=NO
-          build
+      - name: Generate native project, install pods and build for simulator
+        run: pnpm build:ios
       - name: Package app
         run: tar -czf cashline-ios-simulator.tar.gz -C ios/build/Build/Products/Debug-iphonesimulator Cashline.app
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
