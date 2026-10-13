@@ -1,0 +1,16 @@
+# pnpm settings. Rationale: docs/adr/0001-toolchain.md and docs/security.md §13.
+packages:
+  - .
+
+# Do not install versions published less than 3 days ago (minutes).
+minimumReleaseAge: 4320
+
+# Dependency install scripts are blocked unless listed as `true` here.
+# Both packages ship prebuilt binaries, so their scripts stay off.
+allowBuilds:
+  '@parcel/watcher': false
+  unrs-resolver: false
+
+# Optional peers (react-dom, react-native-worklets, ...) would otherwise be
+# pulled in and autolinked into the native build. Peers are declared explicitly.
+autoInstallPeers: false

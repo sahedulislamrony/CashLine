@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+coverage/
+ios/
+android/
+pnpm-lock.yaml
+expo-env.d.ts
+# Upstream texts kept verbatim
+LICENSE
+CODE_OF_CONDUCT.md

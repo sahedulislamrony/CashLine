@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Cashline",
+    "slug": "cashline",
+    "version": "0.0.0",
+    "scheme": "cashline",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/icon.png",
+    "ios": {
+      "bundleIdentifier": "io.github.sahedulislamrony.cashline",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "io.github.sahedulislamrony.cashline",
+      "allowBackup": false,
+      "predictiveBackGestureEnabled": false,
+      "adaptiveIcon": {
+        "backgroundColor": "#176A60",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#176A60",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

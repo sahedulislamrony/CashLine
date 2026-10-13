@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Generated native projects (Continuous Native Generation: never edit by hand)
+/ios
+/android
+
+# Signing material and credentials: never commit (docs/security.md §14)
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Vault and backup files must never land in the repository
+*.cashline
+*.db
+*.sqlite
+
+# Test output
+coverage/
+.maestro/tests/
+*.log
+
+# Tooling
+.metro-health-check*
+*.tsbuildinfo
+.kotlin/
+*.orig.*
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

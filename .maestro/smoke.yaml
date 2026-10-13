@@ -1,0 +1,15 @@
+# Smoke test: the app launches and every tab is reachable.
+# Run against an installed build: `pnpm test:e2e` (see CONTRIBUTING.md).
+appId: io.github.sahedulislamrony.cashline
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Your freelance cash, offline.'
+- tapOn: 'Ledger'
+- assertVisible: 'Income, expenses and transfers arrive in Phase 3.'
+- tapOn: 'Invoices'
+- assertVisible: 'Clients and invoices arrive in Phase 4.'
+- tapOn: 'Outlook'
+- assertVisible: 'The cash-flow outlook arrives in Phase 5.'
+- tapOn: 'More'
+- assertVisible: 'Backup, settings and about.'

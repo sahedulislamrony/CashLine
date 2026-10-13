@@ -1,0 +1,47 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste real financial data, recovery phrases, backup files or screenshots showing client details.
+        Security problems go through private reporting (see SECURITY.md), not here.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options: [iOS, Android]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: App version, OS version and device
+      placeholder: Cashline 0.1.0, iOS 26.1, iPhone 16
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where did the build come from?
+      options: [App Store / Play Store, Built from source, CI artifact]
+    validations:
+      required: true
